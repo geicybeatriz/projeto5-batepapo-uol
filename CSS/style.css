@@ -1,0 +1,178 @@
+
+*{
+    box-sizing: border-box;
+
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f3f3f3;
+}
+/*header*/
+header{
+    width: 100vw;
+    height: 80px;
+
+    position: fixed;
+    left: 0px;
+    top: 0px;
+       
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 22px;
+}
+
+.icone-topo{
+    width: 42.19px;
+    height: 30.94px;
+}
+
+.logo-uol{
+    width: 75px;
+    height: 53px;
+}
+
+/*footer*/
+footer{
+    width: 100%;
+    height: 80px;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    
+    background: #FFFFFF;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.rodape{
+    width: 100%;
+
+    margin-left: 22px;
+    margin-right: 22px;
+
+    display: flex;
+    justify-content: space-between;
+}
+.rodape input:placeholder-shown{
+    font-style: italic;
+}
+.rodape input{
+    width: 300px;
+    height: 30px;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+
+    color: #000000;
+    border: none;
+}
+
+.rodape button{
+    width: 26px;
+    height: 26px;
+    border: none;
+    background-color: #FFFFFF;
+}
+.rodape button ion-icon{
+    width: 26px;
+    height: 26px;
+    color: #000000;
+}
+
+/*.tela-de-conversas{
+    display: none;
+}*/
+
+/*tela de entrada*/
+.tela-de-entrada{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.logo-tela-inicial {
+    width: 100vw;
+    height: 92px;
+
+    margin-top: 72px;
+    margin-bottom: 94px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-tela-inicial img {
+    width: 130px;
+    height: 92px;
+}
+
+.tela-de-entrada form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tela-de-entrada form input{
+    width: 261px;
+    height: 54px;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 25px;
+    /* or 139% */
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+.tela-de-entrada form button{
+    width: 109px;
+    height: 45px;
+
+    color: #696969;
+
+    background-color: #e7e7e7;
+    border:none;
+    border-radius: 9px;
+    margin-top: 15px;
+}
+
+/*tela de carregamento*/
+.tela-carregamento {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #696969;
+    background-color: #f1f2f3;
+}
+
+
+
+
+
+
+
+
