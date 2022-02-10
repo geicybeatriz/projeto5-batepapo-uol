@@ -93,10 +93,56 @@ footer{
     height: 26px;
     color: #000000;
 }
+/*Chat*/
+.conteudo-chat{
+    width: 100%;
 
-/*.tela-de-conversas{
-    display: none;
-}*/
+    margin-top: 106px;
+    gap: 4px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+}
+
+.mensagem{
+    width: 100%;
+    height: auto;
+
+    padding: 12px 9px 12px 8px;
+    
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 2px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.hora-de-envio{
+    color: #aaaaaa;
+}
+
+.usuario, .usuario-destino{
+    font-weight: 700;
+}
+.mensagem-status-usuario{
+    background-color: #DCDCDC;
+}
+.mensagem-normal{
+    background-color: #FFFFFF;
+
+}
+.mensagem-reservada{
+    background-color: #ffdede;
+}
+
+
 
 /*tela de entrada*/
 .tela-de-entrada{
