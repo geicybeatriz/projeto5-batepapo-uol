@@ -10,7 +10,6 @@ body{
     font-family: 'Roboto', sans-serif;
     background-color: #f3f3f3;
 }
-/*header*/
 header{
     width: 100vw;
     height: 80px;
@@ -38,7 +37,6 @@ header{
     height: 53px;
 }
 
-/*footer*/
 footer{
     width: 100%;
     height: 80px;
@@ -93,17 +91,16 @@ footer{
     height: 26px;
     color: #000000;
 }
-/*Chat*/
 .conteudo-chat{
     width: 100%;
 
     margin-top: 106px;
+    margin-bottom: 84px ;
     gap: 4px;
 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
 }
 
 .mensagem{
@@ -122,13 +119,15 @@ footer{
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
+
+    overflow-y: scroll;
 }
 
-.hora-de-envio{
+em{
     color: #aaaaaa;
 }
 
-.usuario, .usuario-destino{
+strong {
     font-weight: 700;
 }
 .mensagem-status-usuario{
@@ -136,15 +135,11 @@ footer{
 }
 .mensagem-normal{
     background-color: #FFFFFF;
-
 }
 .mensagem-reservada{
     background-color: #ffdede;
 }
 
-
-
-/*tela de entrada*/
 .tela-de-entrada{
     width: 100%;
     height: 100%;
@@ -183,7 +178,6 @@ footer{
     font-weight: normal;
     font-size: 18px;
     line-height: 25px;
-    /* or 139% */
 
     display: flex;
     align-items: center;
@@ -201,10 +195,10 @@ footer{
     margin-top: 15px;
 }
 
-/*tela de carregamento*/
+
 .tela-carregamento {
     width: 100%;
-    height: 100%;
+    height: 100vh;
 
     display: flex;
     flex-direction: column;
