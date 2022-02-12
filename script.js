@@ -10,13 +10,14 @@ function iniciarTela(){
                 <img src="./images/logo-tela-entrada.png" alt="logo uol">
             </section>
             <section>
-                <form>
+                <div class="entrada">
                     <input type="text" name="" id="nomeDeUsuario" placeholder="Digite seu nome">
                     <button type="button" class="botao-entrar" onclick= "entrarNaSala()">Entrar</button>
-                </form>
+                </div>
             </section>
         </main>
     `;
+    envioComEnter();
 }
 
 function entrarNaSala(){
@@ -40,10 +41,10 @@ function entrarNoChat(){
             <section class="conteudo-chat"></section>
 
             <footer>
-                <form class="rodape">
+                <div class="rodape">
                     <input type="text" name="" id="mensagemTexto" placeholder="Escreva aqui...">
                     <button type="button" onclick="enviarMensagens()"><ion-icon name="paper-plane-outline"></ion-icon></button>
-                </form>
+                </div>
             </footer>
         </main>
     `; 
@@ -54,7 +55,21 @@ function entrarNoChat(){
 }
 
 function tratarErro(erro){
-    alert("o nome de usuário já existe. Por favor, tente outro nome!");        
+    const reiniciarTela = document.querySelector(".container");
+    reiniciarTela.innerHTML = `
+         <main class="tela-de-entrada">
+            <section class="logo-tela-inicial">
+                <img src="./images/logo-tela-entrada.png" alt="logo uol">
+            </section>
+            <section>
+                <div class="entrada">
+                    <input type="text" name="" id="nomeDeUsuario" placeholder="Digite seu nome">
+                    <p class="alert">Este nome de usuário já existe.Tente novamente. </p>
+                    <button type="button" class="botao-entrar" onclick= "entrarNaSala()">Entrar</button>
+                </div>
+            </section>
+        </main>
+    `;          
 }
 
 function carregando(){
@@ -107,6 +122,7 @@ function renderizarMensagens(resposta){
         }
     }
     rolarMensagens();
+    envioComEnter();
 }
 
 function rolarMensagens(){
@@ -123,7 +139,24 @@ function enviarMensagens(){
         type:"message"    
     };
 
-    let promise = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages",estruturaMensagem);
+    let promessa = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages",estruturaMensagem);
+   
+    document.getElementById("mensagemTexto").value = "";
 
+    promessa.catch(() => {window.location.reload()});
+
+}
+
+function envioComEnter() {
+    const enviar = document.querySelector("input");
+    enviar.onkeydown = (evento) => {
+        if(evento.code === "Enter"){
+            if(enviar.id === "nomeDeUsuario"){
+                entrarNaSala();
+            } else if(enviar.id === "mensagemTexto") {
+                enviarMensagens();
+            }
+        }
+    }
 }
 

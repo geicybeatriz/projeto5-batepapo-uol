@@ -118,8 +118,8 @@ footer{
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 16px;
-
+    line-height: 20px;
+    line-break: strict;
     overflow-y: scroll;
 }
 
@@ -164,13 +164,13 @@ strong {
     height: 92px;
 }
 
-.tela-de-entrada form {
+.tela-de-entrada  .entrada{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.tela-de-entrada form input{
+.tela-de-entrada  input{
     width: 261px;
     height: 54px;
 
@@ -183,7 +183,7 @@ strong {
     align-items: center;
     text-align: center;
 }
-.tela-de-entrada form button{
+.tela-de-entrada button{
     width: 109px;
     height: 45px;
 
@@ -193,6 +193,16 @@ strong {
     border:none;
     border-radius: 9px;
     margin-top: 15px;
+
+    font-size: 18px;
+}
+.alert{
+    color: orangered;
+    font-size: 14px;
+    text-align: center;
+
+    margin-top: 10px;
+
 }
 
 
