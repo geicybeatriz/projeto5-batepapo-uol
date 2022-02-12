@@ -11,8 +11,8 @@ function iniciarTela(){
             </section>
             <section>
                 <div class="entrada">
-                    <input type="text" name="" id="nomeDeUsuario" placeholder="Digite seu nome">
-                    <button type="button" class="botao-entrar" onclick= "entrarNaSala()">Entrar</button>
+                    <input type="text" name="" id="nomeDeUsuario" placeholder="Digite seu nome" data-identifier="enter-name">
+                    <button type="button" class="botao-entrar" onclick= "entrarNaSala()" data-identifier="start">Entrar</button>
                 </div>
             </section>
         </main>
@@ -35,7 +35,7 @@ function entrarNoChat(){
         <main class="tela-de-conversas">
             <header class="topo-pagina">
                 <img src="./images/logo-bp-uol.png" alt="logo bate papo logo-bp-uol" class="logo-uol">
-                <ion-icon class="icone-topo" name="people-sharp"></ion-icon>
+                <ion-icon class="icone-topo" name="people-sharp" onclick="abrirMenu()"></ion-icon>
             </header>
                         
             <section class="conteudo-chat"></section>
@@ -43,15 +43,49 @@ function entrarNoChat(){
             <footer>
                 <div class="rodape">
                     <input type="text" name="" id="mensagemTexto" placeholder="Escreva aqui...">
-                    <button type="button" onclick="enviarMensagens()"><ion-icon name="paper-plane-outline"></ion-icon></button>
+                    <button type="button" onclick="enviarMensagens()" data-identifier="send-message"><ion-icon name="paper-plane-outline"></ion-icon></button>
                 </div>
             </footer>
+        </main>
+        <main class= "tela-participantes escondido">
+            <div class="escura" onclick="abrirMenu()"></div>
+            <aside>
+                <section class="topo">Escolha um contato</br> para enviar mensagem:</section>
+                <section class="participantes">
+                </section>
+
+                <section class="meio">Escolha a visibilidade</section>
+
+                <section class="visibilidade">
+                    <article class="participantes-ativos" data-identifier="visibility">
+                        <div class="icone-usuario">
+                            <ion-icon name="lock-open"></ion-icon>
+                            <p>Público</p>
+                        </div>
+                        <div class="check">
+                            <ion-icon name="checkmark-sharp"></ion-icon>
+                        </div>
+                    </article>
+                    <article class="participantes-ativos" data-identifier="visibility">
+                        <div class="icone-usuario">
+                            <ion-icon name="lock-closed"></ion-icon>
+                            <p>Reservadamente</p>
+                        </div>
+                        <div class="check escondido">
+                            <ion-icon name="checkmark-sharp"></ion-icon>
+                        </div>
+                    </article>
+                </section>
+            </aside>
         </main>
     `; 
 
     setInterval(manterConexao, 5000);
     buscarMensagens();
     setInterval(buscarMensagens, 3000);
+    buscarParticipantes();
+    setInterval(buscarParticipantes, 10000);
+
 }
 
 function tratarErro(erro){
@@ -104,18 +138,18 @@ function renderizarMensagens(resposta){
         let hora = mensagens[i].time;
         if (tipo === "status"){
             conteudoChat.innerHTML += `
-            <article class="mensagem mensagem-status-usuario">
+            <article class="mensagem mensagem-status-usuario" data-identifier="message">
                 <div><em>(${hora})</em> <strong>${de}</strong> ${texto}</div>
             </article> `;
         } else if ((tipo === "message") && (para === "Todos")){
             conteudoChat.innerHTML += `
-            <article class="mensagem mensagem-normal">
+            <article class="mensagem mensagem-normal" data-identifier="message">
                 <div><em>(${hora})</em> <strong>${de}</strong> para <strong>${para}</strong>: ${texto}  </div>
             </article>
             `;
         } else if ((tipo === "private_message") && (para === usuario)){
             conteudoChat.innerHTML += `
-            <article class="mensagem mensagem-reservada">
+            <article class="mensagem mensagem-reservada" data-identifier="message">
                 <div><em>(${hora})</em> <strong>${de}</strong> reservadamente para <strong>${para}</strong>: ${texto}  </div>
             </article>
             `;
@@ -157,6 +191,46 @@ function envioComEnter() {
                 enviarMensagens();
             }
         }
+    }
+}
+
+function abrirMenu(){
+     document.querySelector(".tela-participantes").classList.toggle("escondido");
+}
+
+function buscarParticipantes(){
+    let promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/participants");
+    promessa.then(renderizarContatos);
+}
+
+function renderizarContatos(resposta){
+    let arrayDeParticipantes = resposta.data;
+
+    let participantes = document.querySelector(".participantes");
+    participantes.innerHTML = `
+    <article class="participantes-ativos" data-identifier="participant">
+        <div class="icone-usuario">
+            <ion-icon name="people-sharp"></ion-icon>
+            <p>Todos</p>
+        </div>
+        <div class="check">
+            <ion-icon name="checkmark-sharp"></ion-icon>
+        </div>
+    </article>
+    `;
+
+    for(let i = 0; i < arrayDeParticipantes.length; i++){
+        participantes.innerHTML += `
+        <article class="participantes-ativos" data-identifier="participant">
+            <div class="icone-usuario">
+                <ion-icon name="person-circle-sharp"></ion-icon>
+                <p class="usuarios-ativos">${arrayDeParticipantes[i].name}</p>
+            </div>
+            <div class="check escondido">
+                <ion-icon name="checkmark-sharp"></ion-icon>
+            </div>
+        </article>
+        `;
     }
 }
 
