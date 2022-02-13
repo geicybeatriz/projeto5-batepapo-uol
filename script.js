@@ -1,4 +1,5 @@
 let usuario = "";
+let reserva = "";
 
 iniciarTela();
 
@@ -45,6 +46,7 @@ function entrarNoChat(){
                     <input type="text" name="" id="mensagemTexto" placeholder="Escreva aqui...">
                     <button type="button" onclick="enviarMensagens()" data-identifier="send-message"><ion-icon name="paper-plane-outline"></ion-icon></button>
                 </div>
+                <div class="reservada"></div>
             </footer>
         </main>
         <main class= "tela-participantes escondido">
@@ -62,7 +64,7 @@ function entrarNoChat(){
                             <ion-icon name="lock-open"></ion-icon>
                             <p>Público</p>
                         </div>
-                        <div class="check">
+                        <div class="check selecionado">
                             <ion-icon name="checkmark-sharp"></ion-icon>
                         </div>
                     </article>
@@ -71,7 +73,7 @@ function entrarNoChat(){
                             <ion-icon name="lock-closed"></ion-icon>
                             <p>Reservadamente</p>
                         </div>
-                        <div class="check escondido">
+                        <div class="check">
                             <ion-icon name="checkmark-sharp"></ion-icon>
                         </div>
                     </article>
@@ -80,12 +82,13 @@ function entrarNoChat(){
         </main>
     `; 
 
+    envioComEnter();
     setInterval(manterConexao, 5000);
     buscarMensagens();
     setInterval(buscarMensagens, 3000);
     buscarParticipantes();
     setInterval(buscarParticipantes, 10000);
-
+   
 }
 
 function tratarErro(erro){
@@ -147,7 +150,7 @@ function renderizarMensagens(resposta){
                 <div><em>(${hora})</em> <strong>${de}</strong> para <strong>${para}</strong>: ${texto}  </div>
             </article>
             `;
-        } else if ((tipo === "private_message") && (para === usuario)){
+        } else if ((tipo === "private_message") && ((para === usuario) || (de === usuario))){
             conteudoChat.innerHTML += `
             <article class="mensagem mensagem-reservada" data-identifier="message">
                 <div><em>(${hora})</em> <strong>${de}</strong> reservadamente para <strong>${para}</strong>: ${texto}  </div>
@@ -165,13 +168,18 @@ function rolarMensagens(){
 }
 
 function enviarMensagens(){
+
     let mensagemEnviada = document.getElementById("mensagemTexto").value;
     let estruturaMensagem = {
         from:usuario,
-        to: "Todos",
+        to: reserva,
         text: mensagemEnviada,
         type:"message"    
     };
+
+    if (reserva !== "Todos"){
+        estruturaMensagem.type = "private_message";
+    }
 
     let promessa = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages",estruturaMensagem);
    
@@ -180,6 +188,7 @@ function enviarMensagens(){
     promessa.catch(() => {window.location.reload()});
 
 }
+
 
 function envioComEnter() {
     const enviar = document.querySelector("input");
@@ -208,12 +217,12 @@ function renderizarContatos(resposta){
 
     let participantes = document.querySelector(".participantes");
     participantes.innerHTML = `
-    <article class="participantes-ativos" data-identifier="participant">
+    <article class="participantes-ativos" onclick="selecionarContato(this)" data-identifier="participant">
         <div class="icone-usuario">
             <ion-icon name="people-sharp"></ion-icon>
             <p>Todos</p>
         </div>
-        <div class="check">
+        <div class="check selecionado">
             <ion-icon name="checkmark-sharp"></ion-icon>
         </div>
     </article>
@@ -221,16 +230,71 @@ function renderizarContatos(resposta){
 
     for(let i = 0; i < arrayDeParticipantes.length; i++){
         participantes.innerHTML += `
-        <article class="participantes-ativos" data-identifier="participant">
+        <article class="participantes-ativos" onclick="selecionarContato(this)" data-identifier="participant">
             <div class="icone-usuario">
                 <ion-icon name="person-circle-sharp"></ion-icon>
                 <p class="usuarios-ativos">${arrayDeParticipantes[i].name}</p>
             </div>
-            <div class="check escondido">
+            <div class="check ">
                 <ion-icon name="checkmark-sharp"></ion-icon>
             </div>
         </article>
         `;
     }
+    checarFiltro(resposta);
 }
+
+function selecionarContato(participante){
+    const participanteSelecionado = document.querySelector(".participantes .selecionado");
+    const privacidade = document.querySelector(".visibilidade .selecionado");
+   
+    let contatoCheck = participante.childNodes[3];
+    let iconPublico = document.querySelector(".visibilidade").childNodes[1].childNodes[3];
+    let iconReservado = document.querySelector(".visibilidade").childNodes[3].childNodes[3];
+    let textoDentro = participante.childNodes[1].childNodes[3].innerText;
+   
+    if((participanteSelecionado !== null) && (textoDentro !== usuario)){
+        participanteSelecionado.classList.remove("selecionado");
+        contatoCheck.classList.add("selecionado");
+        reserva = textoDentro;
+
+    }
+    if((textoDentro === "Todos") && (iconReservado !== null) && (textoDentro !== usuario)){
+        iconReservado.classList.remove("selecionado");
+        iconPublico.classList.add("selecionado");
+        limparMensagemPrivada();
+    } else if((textoDentro !== "Todos") && (iconPublico !== null) && (textoDentro !== usuario)){
+        iconPublico.classList.remove("selecionado");
+        iconReservado.classList.add("selecionado");
+        alterarMensagemPrivada();
+        buscarMensagens();
+
+    }
+}
+function condicaoDoFiltro(participante){
+    if(participante.name === reserva){
+        return true;
+    }
+}
+function checarFiltro(resposta){
+    let indiceDoReserva = resposta.data.findIndex(condicaoDoFiltro);
+    let elementoSelecionado = document.querySelector(".participantes").childNodes[(2*indiceDoReserva)+3];
+    let todosSelecionado = document.querySelector(".participantes").childNodes[1];
+
+    if(indiceDoReserva === -1){
+        selecionarContato(todosSelecionado);
+    } else {
+        selecionarContato(elementoSelecionado);
+    }
+}
+function alterarMensagemPrivada(){
+    document.querySelector(".reservada").innerHTML = `
+    Enviando para ${reserva} (reservadamente)
+    `;
+}
+function limparMensagemPrivada(){
+    document.querySelector(".reservada").innerHTML = "";
+}
+
+
 
