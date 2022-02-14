@@ -189,7 +189,6 @@ function enviarMensagens(){
 
 }
 
-
 function envioComEnter() {
     const enviar = document.querySelector("input");
     enviar.onkeydown = (evento) => {
@@ -295,6 +294,3 @@ function alterarMensagemPrivada(){
 function limparMensagemPrivada(){
     document.querySelector(".reservada").innerHTML = "";
 }
-
-
-
